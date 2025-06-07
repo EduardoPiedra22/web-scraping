@@ -11,7 +11,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 
 opts = Options()
-opts.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36")  
+
+# Agregamos el user angent a usar
+opts.add_argument("user-agent=")  
 driver = webdriver.Chrome(
     service=Service(ChromeDriverManager().install()),
     options=opts
@@ -19,34 +21,34 @@ driver = webdriver.Chrome(
 # URL de la pagina web a scrapiar
 driver.get('https://hevy.com/login?postLoginPath=%2Fexercise')
 
-user= ""  # Correo
-password = ""  #Clave
+user= ""  # Agregamos Correo
+password = ""  # Agregamos Clave
 
-# Obtener Inputs 
+# Obtenemos Inputs 
 input_user = driver.find_element(By.XPATH, '//input[@class="sc-1f1e1ba1-2 bTgnVe"]') 
 input_password = driver.find_element(By.XPATH, '//input[@label="Password"]')
 
-# Asignar correo y clave a los inputs
+# Asignamos  correo y clave a los inputs
 input_user.send_keys(user)
 input_password.send_keys(password)
 
-# Obtener el boton de inicio de session 
+# Obtenemos el boton de inicio de session 
 button = driver.find_element(By.XPATH, '//button[@type="submit"]')
 # Click
 button.click()
 
-# esperar a que cargue toda la web
+# Esperarmos a que cargue toda la web
 sleep(20)
 
-# Obtener los Div que se necesita y que contiene un patron
+# Obtenemos los Div que se necesita y que contienen un patron
 contenedores = driver.find_elements(By.XPATH,'//div[contains(@class, "sc-5cfead32-0")]' )
 
 data = []
 
-# Iterar los contenedores
+# Iteramos los contenedores
 for contenedor in contenedores:
     try:
-        # Obtener la informacion necesaria desde los contenedores que se esta iterando
+        # Obtenemos la informacion necesaria desde los contenedores que se esta iterando
         nombres_ejericicios = contenedor.find_element(By.XPATH, './/div[contains(@class, "sc-5cfead32-2")]//p[contains(@class, "sc-8f93c0b5-8")]').text
         
 
@@ -84,4 +86,4 @@ except Exception as e:
             # Alternativa sin openpyxl
         df.to_csv('ejercicios_hevy.csv', index=False, encoding='utf-8')
         print("Datos guardados en CSV como alternativa")
-driver.quit()  # Cerrar el navegador
+driver.quit()  # Cerramos el navegador
